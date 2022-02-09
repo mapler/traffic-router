@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  router:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: "uvicorn traffic-router.main:app --reload --host 0.0.0.0 --port 8000 --timeout-keep-alive 620"
+    volumes:
+      - .:/root/
+    environment:
+      - 'TRAFFIC_ROUTER_MAP=[{"host": "http://api-a:8000", "weight": 80}, {"host": "http://api-b:8000", "weight": 20}]'
+    restart: always
+    tty: true
+    ports:
+      - "8000:8000"
